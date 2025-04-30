@@ -73,3 +73,18 @@ export async function updateUser(req, res) {
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 }
+export async function deleteUser(req, res) {
+    const { id } = req.params;
+
+    try {
+        const [result] = await connection.query('DELETE FROM users WHERE id = ?', [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+        res.json ({message: `Usuário com id ${id} deletado com sucesso`});
+    } catch (error) {
+        console.error('Erro ao deletar usuário:', error);
+        res.status(500).json({ error: 'Erro interno no servidor' });
+    }
+}
